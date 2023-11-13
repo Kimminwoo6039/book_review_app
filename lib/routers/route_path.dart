@@ -1,4 +1,4 @@
 class RoutePath {
   static const String splash = "/splash";
-  static const String init = '/init';
+  static const String login = '/login';
 }

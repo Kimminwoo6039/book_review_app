@@ -58,4 +58,51 @@ build.gradle(app) 파일에서 multiDexEnable을 true로 설정해서 추가하�
   flutter pub add path_provider
 ```
 
+### SVG 사용
 
+```
+flutter pub add flutter_svg
+```
+
+
+### 구글 로그인
+
+```
+    flutter pub add google_sign_in
+```
+
+### 구글로그인 공식 홈페이지 파이어베이스
+
+```
+  https://firebase.flutter.dev/docs/auth/social/
+
+```
+
+
+### 애플로그인
+
+```
+flutter pub add sign_in_with_apple crypto
+```
+
+### 디버그 sha-1추출
+
+```
+https://modelmaker.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-Debug-SHA-Key-%EC%B6%94%EC%B6%9C-%EB%B0%A9%EB%B2%95
+```
+
+
+
+### 구글로그인
+
+```
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.460277249838-8gj05h9uoib7h35h52reqhrj130fda73</string>
+	
+	xcode > Runner > Info > 맨밑에 URL types > URLSCHEMS > sTRING 값 붙혀넣기
+	
+	에러 가나옴
+	
+	
+	cd ios >> pod install
+```
