@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:book1/src/common/components/app_font.dart';
 import 'package:book1/src/common/components/btn.dart';
+import 'package:book1/src/signup/cubit/signup_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -60,15 +65,24 @@ class SignupPage extends StatelessWidget {
 }
 
 class _UserProfileImageFiled extends StatelessWidget {
-  const _UserProfileImageFiled({super.key});
+   _UserProfileImageFiled({super.key});
+  final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
+    var profileFile = context.select<SignupCubit,File?>((value) => value.state.profileFile,);
     return Center(
-      child: CircleAvatar(
-        backgroundColor: Colors.grey,
-        radius: 50,
-        backgroundImage: Image.asset('assets/images/default_avatar.png').image,
+      child: GestureDetector(
+        onTap: () async {
+          var image = await _picker.pickImage(source: ImageSource.gallery);
+          context.read<SignupCubit>().changeProfileImage(image);
+        },
+        child: CircleAvatar(
+          backgroundColor: Colors.grey,
+          radius: 50,
+          backgroundImage: profileFile == null ?
+          Image.asset('assets/images/default_avatar.png').image : Image.file(profileFile).image,
+        ),
       ),
     );
   }

@@ -93,7 +93,7 @@ https://modelmaker.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%
 
 
 
-### 구글로그인
+### 애플로그인
 
 ```
 	<key>REVERSED_CLIENT_ID</key>
@@ -105,4 +105,18 @@ https://modelmaker.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%
 	
 	
 	cd ios >> pod install
+```
+
+
+### IMAGE PICKER
+
+```
+flutter pub add image_picker
+```
+
+
+### Ios
+
+```
+Info.plist 에서 key,string 값 써주어ㅑ함..
 ```

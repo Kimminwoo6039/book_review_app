@@ -1,5 +1,6 @@
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/root/page/root_page.dart';
+import 'package:book1/src/signup/cubit/signup_cubit.dart';
 import 'package:book1/src/signup/page/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,7 +52,7 @@ class _AppState extends State<App> {
         ),
         GoRoute(
           path: '/signup',
-          builder: (context, state) => const SignupPage(),
+          builder: (context, state) => BlocProvider(create: (_) => SignupCubit() ,child: const SignupPage()),
         ),
       ],
     );
