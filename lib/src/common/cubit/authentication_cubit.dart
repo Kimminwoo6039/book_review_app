@@ -29,7 +29,8 @@ class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier
       var result = await _userRepository.findUserOne(user.uid!);
 
       if (result == null) {
-        emit(state.copyWith(status: AuthenticationStatus.unAuthenticated));
+        // 유저 정보 전달
+        emit(state.copyWith(user: user,status: AuthenticationStatus.unAuthenticated));
       } else {
       /// TODO : 로그인 상태
         emit(

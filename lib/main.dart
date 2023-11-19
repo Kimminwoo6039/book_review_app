@@ -3,6 +3,7 @@ import 'package:book1/routers/routers.dart';
 import 'package:book1/src/app.dart';
 import 'package:book1/src/common/cubit/app_data_load_cubit.dart';
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
+import 'package:book1/src/common/cubit/upload_cubit.dart';
 import 'package:book1/src/common/interceptor/custom_interceptor.dart';
 import 'package:book1/src/common/model/naver_book_search_option.dart';
 import 'package:book1/src/common/repository/authentication_repository.dart';
@@ -73,7 +74,7 @@ class MyApp extends StatelessWidget {
             create: (context) => AppDataLoadCubit(),
             lazy: false,
           ),
-          // BlocProvider(create: (context) => UploadCubit(storage)),
+          BlocProvider(create: (context) => UploadCubit(storage)),
           BlocProvider(create: (context) => SpalshCubit()),
           BlocProvider(
             create: (context) => AuthenticationCubit(

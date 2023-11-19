@@ -52,7 +52,10 @@ class _AppState extends State<App> {
         ),
         GoRoute(
           path: '/signup',
-          builder: (context, state) => BlocProvider(create: (_) => SignupCubit() ,child: const SignupPage()),
+          builder: (context, state) => BlocProvider(
+            create: (_) => SignupCubit(context.read<AuthenticationCubit>().state.user!),
+            child: const SignupPage(),
+          ),
         ),
       ],
     );

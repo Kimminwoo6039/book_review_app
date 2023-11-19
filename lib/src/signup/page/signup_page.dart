@@ -2,17 +2,19 @@ import 'dart:io';
 
 import 'package:book1/src/common/components/app_font.dart';
 import 'package:book1/src/common/components/btn.dart';
+import 'package:book1/src/common/cubit/upload_cubit.dart';
 import 'package:book1/src/signup/cubit/signup_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../common/components/loading.dart';
+
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _sigupView(BuildContext context) {
     return Scaffold(
       appBar: AppBar(actions: [
         Padding(
@@ -40,7 +42,11 @@ class SignupPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding:  EdgeInsets.only(left: 20,right: 20,bottom: 20+MediaQuery.of(context).padding.bottom,top: 20),
+        padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 20 + MediaQuery.of(context).padding.bottom,
+            top: 20),
         child: Row(
           children: [
             Expanded(
@@ -49,7 +55,9 @@ class SignupPage extends StatelessWidget {
                 text: '가입',
               ),
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Expanded(
               child: Btn(
                 onTap: () {},
@@ -62,15 +70,82 @@ class SignupPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<SignupCubit, SignupState>(
+            listenWhen: (previous, current) => previous.status != current.status,
+            listener: (context, state) {
+              switch (state.status) {
+                case SigupStatus.init:
+                  break;
+                case SigupStatus.loading:
+                  break;
+                case SigupStatus.uploading:
+                  context.read<UploadCubit>().uploadUserProfileFile(
+                      state.profileFile!, state.userModel!.uid!);
+                  break;
+                case SigupStatus.success:
+                  break;
+                case SigupStatus.fail:
+                  break;
+              }
+            },
+          ),
+          // 업로드
+          BlocListener<UploadCubit, UploadState>(
+            listener: (context, state) {
+              switch (state.status) {
+                case UploadStatus.init:
+                  break;
+                case UploadStatus.uploading:
+                  // 소수점 두자리
+                  context
+                      .read<SignupCubit>()
+                      .uploadPercent(state.percent!.toStringAsFixed(2));
+                  break;
+                case UploadStatus.success:
+                  context.read<SignupCubit>().updateProfileImageUrl(state.url!);
+                  break;
+                case UploadStatus.fail:
+                  break;
+              }
+            },
+          ),
+        ],
+        child: Stack(
+          children: [
+            _sigupView(context),
+            BlocBuilder<SignupCubit, SignupState>(
+              buildWhen: (previous, current) =>
+                  previous.percent != current.percent || previous.status != current.status,
+              builder: (context, state) {
+                if (state.percent != null && state.status == SigupStatus.uploading) {
+                  return Loading(
+                    loadingMessage: '${state.percent}%',
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            )
+          ],
+        ));
+  }
 }
 
 class _UserProfileImageFiled extends StatelessWidget {
-   _UserProfileImageFiled({super.key});
+  _UserProfileImageFiled({super.key});
+
   final ImagePicker _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
-    var profileFile = context.select<SignupCubit,File?>((value) => value.state.profileFile,);
+    var profileFile = context.select<SignupCubit, File?>(
+      (value) => value.state.profileFile,
+    );
     return Center(
       child: GestureDetector(
         onTap: () async {
@@ -80,8 +155,9 @@ class _UserProfileImageFiled extends StatelessWidget {
         child: CircleAvatar(
           backgroundColor: Colors.grey,
           radius: 50,
-          backgroundImage: profileFile == null ?
-          Image.asset('assets/images/default_avatar.png').image : Image.file(profileFile).image,
+          backgroundImage: profileFile == null
+              ? Image.asset('assets/images/default_avatar.png').image
+              : Image.file(profileFile).image,
         ),
       ),
     );
