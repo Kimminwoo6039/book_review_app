@@ -2,6 +2,7 @@ import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:book1/src/home/page/home_page.dart';
 import 'package:book1/src/root/page/root_page.dart';
+import 'package:book1/src/search/page/search_page.dart';
 import 'package:book1/src/signup/cubit/signup_cubit.dart';
 import 'package:book1/src/signup/page/signup_page.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
+    print("시작");
     super.initState();
     router = GoRouter(
       initialLocation: '/',
@@ -29,10 +31,13 @@ class _AppState extends State<App> {
       redirect: (context, state) {
         /// TODO : 진입
         var authStatus = context.read<AuthenticationCubit>().state.status;
+        var blockPageInAuthenticationState = ['/','/login','/signup'];
+        print(state.matchedLocation);
         switch (authStatus) {
           case AuthenticationStatus.authentication: // 인증이 됨 회원가입상태되고 로그인
-            return '/home';
-            break;
+            return blockPageInAuthenticationState.contains(state.matchedLocation)
+            ? '/home'
+            : state.matchedLocation;
           case AuthenticationStatus.unAuthenticated:
             return '/signup';
           case AuthenticationStatus.unKnown:
@@ -56,6 +61,10 @@ class _AppState extends State<App> {
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/search',
+          builder: (context, state) => const SearchPage(),
         ),
         GoRoute(
           path: '/signup',

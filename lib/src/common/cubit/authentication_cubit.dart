@@ -63,6 +63,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier
   void onChange(Change<AuthenticationState> change) {
     super.onChange(change);
     print(change);
+    init();
   }
 
 }

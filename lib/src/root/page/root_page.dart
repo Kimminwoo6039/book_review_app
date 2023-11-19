@@ -12,6 +12,7 @@ class RootPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<InitCubit, bool>(
       builder: (context, state) {
+        print("여기다");
         return state ? SplashPage() :InitPage();
       },
     );
