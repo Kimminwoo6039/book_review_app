@@ -1,4 +1,6 @@
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
+import 'package:book1/src/common/repository/user_repository.dart';
+import 'package:book1/src/home/page/home_page.dart';
 import 'package:book1/src/root/page/root_page.dart';
 import 'package:book1/src/signup/cubit/signup_cubit.dart';
 import 'package:book1/src/signup/page/signup_page.dart';
@@ -28,7 +30,8 @@ class _AppState extends State<App> {
         /// TODO : 진입
         var authStatus = context.read<AuthenticationCubit>().state.status;
         switch (authStatus) {
-          case AuthenticationStatus.authentication:
+          case AuthenticationStatus.authentication: // 인증이 됨 회원가입상태되고 로그인
+            return '/home';
             break;
           case AuthenticationStatus.unAuthenticated:
             return '/signup';
@@ -51,9 +54,14 @@ class _AppState extends State<App> {
           builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
+          path: '/home',
+          builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
           path: '/signup',
           builder: (context, state) => BlocProvider(
-            create: (_) => SignupCubit(context.read<AuthenticationCubit>().state.user!),
+            create: (_) => SignupCubit(context.read<AuthenticationCubit>().state.user!,
+            context.read<UserRepository>()),
             child: const SignupPage(),
           ),
         ),

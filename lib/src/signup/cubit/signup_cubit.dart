@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,7 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import '../../common/model/user_model.dart';
 
 class SignupCubit extends Cubit<SignupState> {
-  SignupCubit(UserModel userModel) : super(SignupState(userModel: userModel));
+  final UserRepository _userRepository;
+  SignupCubit(UserModel userModel,this._userRepository) : super(SignupState(userModel: userModel));
 
   changeProfileImage(XFile? image) {
     if (image == null) return;
@@ -31,6 +33,8 @@ class SignupCubit extends Cubit<SignupState> {
         userModel: state.userModel!.copyWith(profile: url),
       ),
     );
+    //업로드 된후 저장
+    submit();
   }
 
   void uploadPercent(String percent) {
@@ -47,10 +51,24 @@ class SignupCubit extends Cubit<SignupState> {
 
     if (state.profileFile != null) {
       emit(state.copyWith(status: SigupStatus.uploading));
-    } else {}
+    } else {
+      submit();
+    }
 
-    print(state);
   }
+
+
+  void submit() async {
+    var JoinUserModel = state.userModel!.copyWith(name: state.nickname,discription: state.discription);
+    var result = await _userRepository.joinUser(JoinUserModel);
+    // 회원저장.
+    if (result) {
+      emit(state.copyWith(status: SigupStatus.success));
+    } else {
+      /// TODO 오류 메시지
+      emit(state.copyWith(status: SigupStatus.fail));
+    }
+}
 }
 
 enum SigupStatus {

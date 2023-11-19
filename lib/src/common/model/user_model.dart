@@ -9,28 +9,34 @@ class UserModel extends Equatable {
   final String? name;
   final String? email;
   final String ? profile;
+  final String ? discription;
 
   const UserModel({
     this.uid,
     this.name,
     this.email,
     this.profile,
+    this.discription,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
+
+  Map<String,dynamic> toMap() =>_$UserModelToJson(this);
 
   UserModel copyWith({
     String? uid,
     String? name,
     String? email,
     String? profile,
+    String? discription,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       name: name ?? this.name,
       profile: profile ?? this.profile,
+      discription: discription ?? this.discription,
     );
   }
 
@@ -39,6 +45,7 @@ class UserModel extends Equatable {
         uid,
         name,
         email,
-    profile
+    profile,
+    discription,
       ];
 }
