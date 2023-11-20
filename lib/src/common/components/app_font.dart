@@ -7,6 +7,7 @@ class AppFont extends StatelessWidget {
   final FontWeight fontWeight;
   final Color color;
   final TextAlign textAlign;
+  final double? lineHeight;
   final int? maxLine;
   final TextOverflow? overflow; // 양이 많이지면 .... 임
 
@@ -19,6 +20,7 @@ class AppFont extends StatelessWidget {
         this.size = 15,
         this.maxLine,
         this.overflow,
+        this.lineHeight,
       });
 
   @override
@@ -32,6 +34,7 @@ class AppFont extends StatelessWidget {
         fontSize: size,
         fontWeight: fontWeight,
         color: color,
+        height: lineHeight,
       ),
     );
   }

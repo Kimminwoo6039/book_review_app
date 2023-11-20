@@ -1,4 +1,5 @@
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
+import 'package:book1/src/common/model/naver_book_info.dart';
 import 'package:book1/src/common/repository/naver_api_reposiroty.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:book1/src/home/page/home_page.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import 'book_info/page/book_info.dart';
 import 'login/page/login_page.dart';
 
 class App extends StatefulWidget {
@@ -54,7 +56,10 @@ class _AppState extends State<App> {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => const RootPage(),
+          builder: (context, state) => BlocProvider(
+            create: (context) => context.read<AuthenticationCubit>(),
+            child: const RootPage(),
+          ),
         ),
         GoRoute(
           path: '/login',
@@ -63,6 +68,10 @@ class _AppState extends State<App> {
         GoRoute(
           path: '/home',
           builder: (context, state) => const HomePage(),
+        ),
+        GoRoute(
+          path: '/info',
+          builder: (context, state) =>  BookInfoPage(state.extra as NaverBookInfo),
         ),
         GoRoute(
           path: '/search',
