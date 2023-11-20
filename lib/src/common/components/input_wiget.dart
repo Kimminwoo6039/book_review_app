@@ -4,7 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class InputWidget extends StatelessWidget {
   final bool isEnabled;
   final Function()? onTap;
-  const InputWidget({super.key, this.isEnabled = true,this.onTap});
+  final Function(String)? onSearch;
+  const InputWidget({super.key, this.isEnabled = true,this.onTap,this.onSearch});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,8 @@ class InputWidget extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/svg/icons/icon_search.svg'),
              Expanded(
-                child: TextField(
+              child:  TextField(style: TextStyle(color: Colors.white),
+              onSubmitted: onSearch,
               decoration: InputDecoration(
                 hintText: '검색어를 입력해 주세요.',
                 hintStyle: const TextStyle(

@@ -4,5 +4,5 @@ enum CommonStatus {
   loading,
   loaded,
   error,
-
+  complate,
 }

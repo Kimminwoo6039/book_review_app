@@ -13,12 +13,28 @@ class NaverBookInfoResults extends Equatable {
   final int? display;
   final List<NaverBookInfo>? items;
 
-  NaverBookInfoResults({
+  const NaverBookInfoResults.init() : this(start: 1,display: 10,items: const []);
+
+  const NaverBookInfoResults({
     this.total,
     this.start,
     this.display,
     this.items,
 });
+
+  NaverBookInfoResults copyWith({
+     int? total,
+     int? start,
+     int? display,
+     List<NaverBookInfo>? items,
+}){
+    return NaverBookInfoResults(
+      total: total ?? this.total,
+      start: start ?? this.start,
+      display: display ?? this.display,
+      items: [...this.items ?? [], ...items?? []], // 추가적으로 붙혀줌..
+    );
+}
 
   factory NaverBookInfoResults.fromJson(Map<String,dynamic> json) => _$NaverBookInfoResultsFromJson(json);
 

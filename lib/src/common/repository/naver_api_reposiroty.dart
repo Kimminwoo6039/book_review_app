@@ -6,7 +6,7 @@ class NaverBookRepostory {
   final Dio _dio;
   NaverBookRepostory(this._dio);
 
-  Future<NaverBookInfoResults> SearchBook(NaverBookSearchOption searchOption) async {
+  Future<NaverBookInfoResults> searchBook(NaverBookSearchOption searchOption) async {
     var response = await _dio.get('/v1/search/book.json',queryParameters:
     searchOption.toMap());
 
