@@ -70,10 +70,10 @@ class MyApp extends StatelessWidget {
             create: (context) => InitCubit(),
             lazy: false,
           ),
-          BlocProvider(
-            create: (context) => AppDataLoadCubit(),
-            lazy: false,
-          ),
+          // BlocProvider(
+          //   create: (context) => AppDataLoadCubit(),
+          //   lazy: false,
+          // ),
           BlocProvider(create: (context) => UploadCubit(storage)),
           BlocProvider(create: (context) => SpalshCubit()),
           BlocProvider(
