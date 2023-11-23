@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
     var storage = FirebaseStorage.instance;
     return MultiRepositoryProvider(
       providers: [
+
         RepositoryProvider(
           create: (context) => NaverBookRepostory(dio),
         ),
