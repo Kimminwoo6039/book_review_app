@@ -54,13 +54,7 @@ class _AppState extends State<App> {
         return state.path;
       },
       routes: [
-        GoRoute(
-          path: '/',
-          builder: (context, state) => BlocProvider(
-            create: (context) => context.read<AuthenticationCubit>(),
-            child: const RootPage(),
-          ),
-        ),
+        GoRoute(path: '/', builder: (context, state) => const RootPage()),
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginPage(),
