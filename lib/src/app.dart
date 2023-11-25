@@ -1,3 +1,4 @@
+import 'package:book1/src/book_info/cubit/book_info_cubit.dart';
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/common/model/naver_book_info.dart';
 import 'package:book1/src/common/repository/book_review_info_repository.dart';
@@ -5,8 +6,9 @@ import 'package:book1/src/common/repository/naver_api_reposiroty.dart';
 import 'package:book1/src/common/repository/review_repository.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:book1/src/home/page/home_page.dart';
-import 'package:book1/src/review/cubit/review_cubit.dart';
-import 'package:book1/src/review/page/review_page.dart';
+import 'package:book1/src/review/detail/page/review_detail_page.dart';
+import 'package:book1/src/review/write/cubit/review_write_cubit.dart';
+import 'package:book1/src/review/write/page/review_write_page.dart';
 import 'package:book1/src/root/page/root_page.dart';
 import 'package:book1/src/search/cubit/search_book_cubit.dart';
 import 'package:book1/src/search/page/search_page.dart';
@@ -70,8 +72,14 @@ class _AppState extends State<App> {
         ),
         GoRoute(
           path: '/info',
-          builder: (context, state) =>
-              BookInfoPage(state.extra as NaverBookInfo),
+          builder: (context, state) => BlocProvider(
+              create: (context) => BookInfoCubit(
+                    context.read<BookReviewInfoRepository>(),
+                    context.read<AuthenticationCubit>().state.user!.uid!,
+                    context.read<UserRepository>(),
+                    (state.extra as NaverBookInfo).isbn,
+                  ),
+              child: BookInfoPage(state.extra as NaverBookInfo)),
         ),
         GoRoute(
           path: '/review',
@@ -79,12 +87,10 @@ class _AppState extends State<App> {
               create: (context) {
                 var naverBookInfo = state.extra as NaverBookInfo;
                 var uid = context.read<AuthenticationCubit>().state.user!.uid!;
-                return ReviewCubit(
-                context.read<BookReviewInfoRepository>(),
-                context.read<ReviewRepository>(),
-                uid, naverBookInfo);
+                return ReviewWriteCubit(context.read<BookReviewInfoRepository>(),
+                    context.read<ReviewRepository>(), uid, naverBookInfo);
               },
-              child: ReviewPage(state.extra as NaverBookInfo)),
+              child: ReviewWritePage(state.extra as NaverBookInfo)),
         ),
         GoRoute(
           path: '/search',
@@ -92,6 +98,10 @@ class _AppState extends State<App> {
               create: (context) =>
                   SearchBookCubit(context.read<NaverBookRepostory>()),
               child: const SearchPage()),
+        ),
+        GoRoute(
+          path: '/review-detail',
+          builder: (context, state) => ReviewDetailPage(state.extra as NaverBookInfo),
         ),
         GoRoute(
           path: '/signup',

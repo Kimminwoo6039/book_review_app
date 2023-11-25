@@ -1,9 +1,11 @@
 import 'package:book1/src/app.dart';
+import 'package:book1/src/book_info/cubit/book_info_cubit.dart';
 import 'package:book1/src/common/components/app_divider.dart';
 import 'package:book1/src/common/components/app_font.dart';
 import 'package:book1/src/common/components/btn.dart';
 import 'package:book1/src/common/model/naver_book_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -45,10 +47,19 @@ class BookInfoPage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Padding(
-        padding:  EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20 + MediaQuery.of(context).padding.bottom),
-        child: Btn(onTap: (){
-          context.push("/review",extra: naverBookInfo);
-        }, text: '리뷰하기'),
+        padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 20 + MediaQuery.of(context).padding.bottom),
+        child: Btn(
+            onTap: () async {
+              var isNeedRefresh = await context.push<bool?>("/review", extra: naverBookInfo);
+              if (isNeedRefresh != null && isNeedRefresh) {
+                context.read<BookInfoCubit>().refresh();
+              }
+            },
+            text: '리뷰하기'),
       ),
     );
   }
@@ -82,10 +93,33 @@ class _ReviewrLayer extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          SizedBox(
-            child: _noneReviewr(),
-            height: 70,
-          ), // 없을수도 있으니 분기처리 함수로
+          BlocBuilder<BookInfoCubit, BookInfoState>(builder: (context, state) {
+            if (state.bookReivewInfo == null) {
+              return SizedBox(
+                child: _noneReviewr(),
+                height: 70,
+              );
+            } else {
+              return SizedBox(
+                  height: 70,
+                  child: ListView.separated(
+                      scrollDirection: Axis.horizontal, // 가로로 스크롤
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            context.push("/review-detail" , extra: state.bookReivewInfo!.naverBookInfo!);
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey,
+                            radius: 32,
+                            backgroundImage: Image.network(state.reviewrs![index].profile ?? '').image,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(width: 20),
+                      itemCount: state.bookReivewInfo!.reviewerUids!.length!));
+            }
+          }), // 없을수도 있으니 분기처리 함수로
         ],
       ),
     );
@@ -155,11 +189,16 @@ class _BookDisplayLayer extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            const AppFont(
-              '8.88',
-              size: 16,
-              color: Color(0xffF4AA2B),
-            ),
+            BlocBuilder<BookInfoCubit, BookInfoState>(
+                builder: (context, state) {
+              return AppFont(
+                state.bookReivewInfo == null
+                    ? '리뷰 점수 없음'
+                    : '${(state.bookReivewInfo!.totalCount! / state.bookReivewInfo!.reviewerUids!.length).toStringAsFixed(2)}',
+                size: 16,
+                color: Color(0xffF4AA2B),
+              );
+            }),
           ],
         ),
         SizedBox(
@@ -170,6 +209,7 @@ class _BookDisplayLayer extends StatelessWidget {
               const EdgeInsets.only(top: 0, bottom: 0, left: 35, right: 35),
           child: AppFont(
             naverBookInfo.title ?? '',
+            textAlign: TextAlign.center,
             size: 16,
             fontWeight: FontWeight.bold,
           ),
