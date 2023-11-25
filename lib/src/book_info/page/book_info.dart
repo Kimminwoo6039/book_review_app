@@ -46,7 +46,9 @@ class BookInfoPage extends StatelessWidget {
       ),
       bottomNavigationBar: Padding(
         padding:  EdgeInsets.only(left: 20,right: 20,top: 20,bottom: 20 + MediaQuery.of(context).padding.bottom),
-        child: Btn(onTap: (){}, text: '리뷰하기'),
+        child: Btn(onTap: (){
+          context.push("/review",extra: naverBookInfo);
+        }, text: '리뷰하기'),
       ),
     );
   }

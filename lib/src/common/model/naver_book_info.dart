@@ -12,32 +12,36 @@ class NaverBookInfo extends Equatable {
   final String? discount;
   final String? publisher;
   final String? pubdate;
+  final String? isbn;
   final String? description;
 
-
-  NaverBookInfo({
+  const NaverBookInfo({
     this.title,
     this.link,
     this.image,
+    this.author,
+    this.discount,
     this.publisher,
     this.pubdate,
-    this.author,
+    this.isbn,
     this.description,
-    this.discount,
-});
+  });
 
-  factory NaverBookInfo.fromJson(Map<String,dynamic> json)=>_$NaverBookInfoFromJson(json);
+  factory NaverBookInfo.fromJson(Map<String, dynamic> json) =>
+      _$NaverBookInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NaverBookInfoToJson(this);
 
   @override
   List<Object?> get props => [
     title,
     link,
     image,
+    author,
+    discount,
     publisher,
     pubdate,
-    author,
+    isbn,
     description,
-    discount
   ];
-
 }

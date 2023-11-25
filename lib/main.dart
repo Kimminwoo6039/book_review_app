@@ -7,7 +7,9 @@ import 'package:book1/src/common/cubit/upload_cubit.dart';
 import 'package:book1/src/common/interceptor/custom_interceptor.dart';
 import 'package:book1/src/common/model/naver_book_search_option.dart';
 import 'package:book1/src/common/repository/authentication_repository.dart';
+import 'package:book1/src/common/repository/book_review_info_repository.dart';
 import 'package:book1/src/common/repository/naver_api_reposiroty.dart';
+import 'package:book1/src/common/repository/review_repository.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:book1/src/init/cubit/init_cubit.dart';
 import 'package:book1/src/splash/cubit/splash_cubit.dart';
@@ -58,12 +60,12 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (context) => UserRepository(db),
         ),
-        // RepositoryProvider(
-        //   create: (context) => BookReviewInfoRepository(db),
-        // ),
-        // RepositoryProvider(
-        //   create: (context) => ReviewRepository(db),
-        // )
+        RepositoryProvider(
+          create: (context) => BookReviewInfoRepository(db),
+        ),
+        RepositoryProvider(
+          create: (context) => ReviewRepository(db),
+        )
       ],
       child: MultiBlocProvider(
         providers: [

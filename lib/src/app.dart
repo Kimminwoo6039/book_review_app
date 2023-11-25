@@ -1,8 +1,12 @@
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/common/model/naver_book_info.dart';
+import 'package:book1/src/common/repository/book_review_info_repository.dart';
 import 'package:book1/src/common/repository/naver_api_reposiroty.dart';
+import 'package:book1/src/common/repository/review_repository.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
 import 'package:book1/src/home/page/home_page.dart';
+import 'package:book1/src/review/cubit/review_cubit.dart';
+import 'package:book1/src/review/page/review_page.dart';
 import 'package:book1/src/root/page/root_page.dart';
 import 'package:book1/src/search/cubit/search_book_cubit.dart';
 import 'package:book1/src/search/page/search_page.dart';
@@ -35,13 +39,14 @@ class _AppState extends State<App> {
       redirect: (context, state) {
         /// TODO : 진입
         var authStatus = context.read<AuthenticationCubit>().state.status;
-        var blockPageInAuthenticationState = ['/','/login','/signup'];
+        var blockPageInAuthenticationState = ['/', '/login', '/signup'];
         print(state.matchedLocation);
         switch (authStatus) {
           case AuthenticationStatus.authentication: // 인증이 됨 회원가입상태되고 로그인
-            return blockPageInAuthenticationState.contains(state.matchedLocation)
-            ? '/home'
-            : state.matchedLocation;
+            return blockPageInAuthenticationState
+                    .contains(state.matchedLocation)
+                ? '/home'
+                : state.matchedLocation;
           case AuthenticationStatus.unAuthenticated:
             return '/signup';
           case AuthenticationStatus.unKnown:
@@ -65,21 +70,35 @@ class _AppState extends State<App> {
         ),
         GoRoute(
           path: '/info',
-          builder: (context, state) =>  BookInfoPage(state.extra as NaverBookInfo),
+          builder: (context, state) =>
+              BookInfoPage(state.extra as NaverBookInfo),
+        ),
+        GoRoute(
+          path: '/review',
+          builder: (context, state) => BlocProvider(
+              create: (context) {
+                var naverBookInfo = state.extra as NaverBookInfo;
+                var uid = context.read<AuthenticationCubit>().state.user!.uid!;
+                return ReviewCubit(
+                context.read<BookReviewInfoRepository>(),
+                context.read<ReviewRepository>(),
+                uid, naverBookInfo);
+              },
+              child: ReviewPage(state.extra as NaverBookInfo)),
         ),
         GoRoute(
           path: '/search',
-          builder: (context, state) =>
-              BlocProvider(
-                create: (context) => SearchBookCubit(context.read<NaverBookRepostory>()),
-                child: const SearchPage()
-          ),
+          builder: (context, state) => BlocProvider(
+              create: (context) =>
+                  SearchBookCubit(context.read<NaverBookRepostory>()),
+              child: const SearchPage()),
         ),
         GoRoute(
           path: '/signup',
           builder: (context, state) => BlocProvider(
-            create: (_) => SignupCubit(context.read<AuthenticationCubit>().state.user!,
-            context.read<UserRepository>()),
+            create: (_) => SignupCubit(
+                context.read<AuthenticationCubit>().state.user!,
+                context.read<UserRepository>()),
             child: const SignupPage(),
           ),
         ),
@@ -92,6 +111,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           elevation: 0,

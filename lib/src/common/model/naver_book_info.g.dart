@@ -11,11 +11,12 @@ NaverBookInfo _$NaverBookInfoFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       link: json['link'] as String?,
       image: json['image'] as String?,
+      author: json['author'] as String?,
+      discount: json['discount'] as String?,
       publisher: json['publisher'] as String?,
       pubdate: json['pubdate'] as String?,
-      author: json['author'] as String?,
+      isbn: json['isbn'] as String?,
       description: json['description'] as String?,
-      discount: json['discount'] as String?,
     );
 
 Map<String, dynamic> _$NaverBookInfoToJson(NaverBookInfo instance) =>
@@ -27,5 +28,6 @@ Map<String, dynamic> _$NaverBookInfoToJson(NaverBookInfo instance) =>
       'discount': instance.discount,
       'publisher': instance.publisher,
       'pubdate': instance.pubdate,
+      'isbn': instance.isbn,
       'description': instance.description,
     };
