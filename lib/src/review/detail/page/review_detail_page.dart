@@ -1,6 +1,10 @@
 import 'package:book1/src/common/components/app_font.dart';
 import 'package:book1/src/common/components/book_review_header_wiget.dart';
+import 'package:book1/src/common/cubit/authentication_cubit.dart';
+import 'package:book1/src/common/utils/data_util.dart';
+import 'package:book1/src/review/detail/cubit/review_detail_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,11 +46,14 @@ class ReviewDetailPage extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                const AppFont(
-                  '4.6',
-                  size: 12,
-                  color: Color(0xffF4AA2B),
-                ),
+                BlocBuilder<ReviewDetailCubit, ReviewDetailState>(
+                    builder: (context, state) {
+                  return AppFont(
+                    (state.review?.value ?? 0).toStringAsFixed(2),
+                    size: 12,
+                    color: Color(0xffF4AA2B),
+                  );
+                }),
               ],
             ),
           ),
@@ -63,24 +70,25 @@ class ReviewDetailPage extends StatelessWidget {
 class _ReviewInfoWidget extends StatelessWidget {
   const _ReviewInfoWidget({super.key});
 
-  Widget _profile() {
+  Widget _profile(ReviewDetailState state) {
+    if (state.review == null) return Container();
     return Row(
       children: [
         CircleAvatar(
-          radius: 33,
-          backgroundColor: Colors.grey,
-          backgroundImage:
-              Image.asset('assets/images/default_avatar.png').image,
-        ),
+            radius: 33,
+            backgroundColor: Colors.grey,
+            backgroundImage: state.userModel?.profile == null
+                ? Image.asset('assets/images/default_avatar.png').image
+                : Image.network(state.userModel!.profile!).image),
         const SizedBox(
           width: 15,
         ),
-        const Expanded(
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               AppFont(
-                "리뷰작성",
+                state.userModel?.name ?? '',
                 size: 18,
                 color: Color(0xffC9C9C9),
               ),
@@ -88,11 +96,12 @@ class _ReviewInfoWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppFont(
-                    "공감 0개",
+                    "공감 ${state.review!.likedUsers?.length ?? 0} 개",
                     fontWeight: FontWeight.bold,
                   ),
                   AppFont(
-                    "2023.11.25",
+                    AppDataUtil.dataFormat(
+                        'yyyy.MM.dd', state.review!.createdAt!),
                     size: 12,
                     color: Color(0xff878787),
                   ),
@@ -108,29 +117,44 @@ class _ReviewInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _profile(),
-          const SizedBox(height: 30,),
-          AppFont(
-            '리뷰내용',
-            size: 14,
-            color: const Color(0xffA7A7A7),
-          ),
-          GestureDetector(
-            onTap: (){},
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
-              child: SvgPicture.asset(
-                'assets/svg/icons/icon_liked.svg',
-                width: 30,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        child: BlocBuilder<ReviewDetailCubit, ReviewDetailState>(
+          builder: (context, state) {
+            var myUid = context.read<AuthenticationCubit>().state.user!.uid!;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _profile(state),
+                const SizedBox(
+                  height: 30,
+                ),
+                BlocBuilder<ReviewDetailCubit, ReviewDetailState>(
+                    builder: (context, state) {
+                  return AppFont(
+                    state.review?.review ?? '',
+                    size: 14,
+                    color: const Color(0xffA7A7A7),
+                  );
+                }),
+                GestureDetector(
+                  onTap: () {
+                    context.read<ReviewDetailCubit>().toggleLikedReview(myUid);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: SvgPicture.asset(
+                      'assets/svg/icons/icon_liked.svg',
+                      width: 30,
+                      colorFilter: state.review?.likedUsers?.contains(myUid) ??
+                              false
+                          ? ColorFilter.mode(Color(0xffF4AA2B), BlendMode.srcIn)
+                          : ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        ));
   }
 }

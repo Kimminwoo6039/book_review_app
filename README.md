@@ -120,3 +120,9 @@ flutter pub add image_picker
 ```
 Info.plist 에서 key,string 값 써주어ㅑ함..
 ```
+
+
+### 날짜 포맷 datefORAT
+```
+flutter pub add intl
+```

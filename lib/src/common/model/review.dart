@@ -11,6 +11,7 @@ class Review extends Equatable {
   final String? review;
   final double? value;
   final String? reviewerUid;
+  final List<String>? likedUsers;
   final NaverBookInfo? naverBookInfo;
   final DateTime? createdAt;
   final DateTime? updateAt;
@@ -22,7 +23,8 @@ class Review extends Equatable {
     this.naverBookInfo,
     this.createdAt,
     this.updateAt,
-    this.reviewerUid
+    this.reviewerUid,
+    this.likedUsers,
   });
 
   factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
@@ -39,6 +41,7 @@ class Review extends Equatable {
     NaverBookInfo? naverBookInfo,
     DateTime? createdAt,
     DateTime? updateAt,
+    List<String>? likedUsers,
   }) {
     return Review(
       review: review ?? this.review,
@@ -48,11 +51,12 @@ class Review extends Equatable {
       reviewerUid: reviewerUid ?? this.reviewerUid,
       updateAt: updateAt ?? this.updateAt,
       value: value ?? this.value,
+      likedUsers: likedUsers ?? this.likedUsers,
     );
   }
 
 
   @override
   List<Object?> get props =>
-      [review, value, naverBookInfo, createdAt, updateAt, bookId, reviewerUid];
+      [review, value, naverBookInfo, createdAt, updateAt, bookId, reviewerUid,likedUsers];
 }

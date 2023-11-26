@@ -107,7 +107,7 @@ class _ReviewrLayer extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            context.push("/review-detail" , extra: state.bookReivewInfo!.naverBookInfo!);
+                            context.push("/review-detail/${state.bookReivewInfo!.bookId}/${state.reviewrs![index].uid}" , extra: state.bookReivewInfo!.naverBookInfo!);
                           },
                           child: CircleAvatar(
                             backgroundColor: Colors.grey,
