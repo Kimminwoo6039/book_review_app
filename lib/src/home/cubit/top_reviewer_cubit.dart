@@ -12,13 +12,12 @@ class TopReviewerCubit extends Cubit<TopReviewerState> {
   }
 
   _loadTopReviewerData() async {
+    emit(state.copyWith(results: []));
     var result = await userRepository.loadTopReviewerData();
     emit(state.copyWith(results: result));
-    print("됨");
   }
 
   void refresh() async {
-    print("음");
     await _loadTopReviewerData();
   }
 

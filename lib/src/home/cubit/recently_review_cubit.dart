@@ -1,5 +1,6 @@
 import 'package:book1/src/common/model/book_review_info.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../common/repository/book_review_info_repository.dart';
@@ -13,11 +14,9 @@ class RecentlyCubit extends Cubit<RecentlyState> {
   _loadBookReviewInfos() async {
     var result = await bookReviewInfoRepository.loadBookReviewRecentlyData();
     emit(state.copyWith(result: result));
-    print("여기두");
   }
 
  void refresh() async {
-    print("역;ㅣ");
    await _loadBookReviewInfos();
 }
 }
@@ -32,6 +31,6 @@ class RecentlyState extends Equatable {
     return RecentlyState(result: result ?? this.result);
 }
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [result];
 
 }
