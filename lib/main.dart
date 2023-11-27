@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthenticationCubit(
               context.read<AuthenticationRepository>(),
               context.read<UserRepository>(),
-              // context.read<ReviewRepository>(),
+              context.read<ReviewRepository>(),
             ),
           )
         ],

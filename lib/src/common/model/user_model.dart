@@ -8,8 +8,13 @@ class UserModel extends Equatable {
   final String? uid;
   final String? name;
   final String? email;
-  final String ? profile;
-  final String ? discription;
+  final String? profile;
+  final String? discription;
+  final List<String>? followers;
+  final List<String>? followings;
+  final int? followersCount;
+  final int? followingsCount;
+  final int? reviewCount;
 
   const UserModel({
     this.uid,
@@ -17,12 +22,17 @@ class UserModel extends Equatable {
     this.email,
     this.profile,
     this.discription,
+    this.followers,
+    this.followings,
+    this.followersCount,
+    this.followingsCount,
+    this.reviewCount,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
 
-  Map<String,dynamic> toMap() =>_$UserModelToJson(this);
+  Map<String, dynamic> toMap() => _$UserModelToJson(this);
 
   UserModel copyWith({
     String? uid,
@@ -30,6 +40,11 @@ class UserModel extends Equatable {
     String? email,
     String? profile,
     String? discription,
+    List<String>? followers,
+    List<String>? followings,
+    int? followersCount,
+    int? followingsCount,
+    int? reviewCount,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -37,15 +52,15 @@ class UserModel extends Equatable {
       name: name ?? this.name,
       profile: profile ?? this.profile,
       discription: discription ?? this.discription,
+      followers: followers ?? this.followers,
+      followings: followings ?? this.followings,
+      followersCount: followingsCount ?? this.followersCount,
+      followingsCount: followingsCount ?? this.followingsCount,
+      reviewCount: reviewCount ?? this.reviewCount,
     );
   }
 
   @override
-  List<Object?> get props => [
-        uid,
-        name,
-        email,
-    profile,
-    discription,
-      ];
+  List<Object?> get props =>
+      [uid, name, email, profile, discription, followers, followings,followersCount,followingsCount,reviewCount];
 }

@@ -35,7 +35,7 @@ class BookReviewInfoRepository {
   Future<List<BookReivewInfo>?> loadBookReviewRecentlyData() async {
     var doc = await db
         .collection('book_review_info')
-        .orderBy('updatedAt', descending: true)
+        .orderBy('updateAt', descending: true)
         .limit(10)
         .get();
     if (doc.docs.isEmpty) {
@@ -45,5 +45,7 @@ class BookReviewInfoRepository {
         .map<BookReivewInfo>((data) => BookReivewInfo.fromJson(data.data()))
         .toList();
   }
+
+
 }
 

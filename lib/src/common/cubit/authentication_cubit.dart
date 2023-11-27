@@ -5,13 +5,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../repository/review_repository.dart';
 import '../repository/user_repository.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier {
   final AuthenticationRepository _authenticationRepository;
   final UserRepository _userRepository;
-
-  AuthenticationCubit(this._authenticationRepository, this._userRepository)
+  final ReviewRepository reviewRepository;
+  AuthenticationCubit(this._authenticationRepository, this._userRepository,this.reviewRepository)
       : super(AuthenticationState());
 
   // 스플래시 에서 구독
@@ -62,6 +63,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier
   void logout() async {
     _authenticationRepository.logout();
   }
+
+  Future<void>? updateReviewCounts() async {
+    var results = await reviewRepository.loadMyAllReviews(state.user!.uid!);
+    await _userRepository.updateReviewCounts(state.user!.uid!,results.length);
+}
 
   @override
   void onChange(Change<AuthenticationState> change) {

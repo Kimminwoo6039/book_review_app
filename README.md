@@ -126,3 +126,9 @@ Info.plist 에서 key,string 값 써주어ㅑ함..
 ```
 flutter pub add intl
 ```
+
+### 홈페이지 리프레시
+
+```
+flutter pub add pull_to_refresh
+```

@@ -5,7 +5,11 @@ import 'package:book1/src/common/repository/book_review_info_repository.dart';
 import 'package:book1/src/common/repository/naver_api_reposiroty.dart';
 import 'package:book1/src/common/repository/review_repository.dart';
 import 'package:book1/src/common/repository/user_repository.dart';
+import 'package:book1/src/home/cubit/top_reviewer_cubit.dart';
 import 'package:book1/src/home/page/home_page.dart';
+import 'package:book1/src/profile/cubit/user-review_cubit.dart';
+import 'package:book1/src/profile/cubit/user_profile_cubit.dart';
+import 'package:book1/src/profile/page/user_profile_page.dart';
 import 'package:book1/src/review/detail/cubit/review_detail_cubit.dart';
 import 'package:book1/src/review/detail/page/review_detail_page.dart';
 import 'package:book1/src/review/write/cubit/review_write_cubit.dart';
@@ -20,6 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'book_info/page/book_info.dart';
+import 'home/cubit/recently_review_cubit.dart';
 import 'login/page/login_page.dart';
 
 class App extends StatefulWidget {
@@ -69,7 +74,21 @@ class _AppState extends State<App> {
         ),
         GoRoute(
           path: '/home',
-          builder: (context, state) => const HomePage(),
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) =>
+                    RecentlyCubit(context.read<BookReviewInfoRepository>()),
+                lazy: false,
+              ),
+              BlocProvider(
+                create: (context) =>
+                    TopReviewerCubit(context.read<UserRepository>()),
+                lazy: false,
+              ),
+            ],
+            child: const HomePage(),
+          ),
         ),
         GoRoute(
           path: '/info',
@@ -121,6 +140,28 @@ class _AppState extends State<App> {
                 context.read<AuthenticationCubit>().state.user!,
                 context.read<UserRepository>()),
             child: const SignupPage(),
+          ),
+        ),
+        GoRoute(
+          path: '/profile/:uid',
+          builder: (context, state) => MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => UserProfileCubit(
+                  state.pathParameters['uid'] as String,
+                  context.read<UserRepository>(),
+                ),
+                lazy: false, // 안돌아도 사용가능하게
+              ),
+              BlocProvider(
+                create: (context) => UserReviewCubit(
+                  context.read<ReviewRepository>(),
+                  state.pathParameters['uid'] as String,
+                ),
+                lazy: false, // 안돌아도 사용가능하게
+              )
+            ],
+            child: UserProfilePage(),
           ),
         ),
       ],

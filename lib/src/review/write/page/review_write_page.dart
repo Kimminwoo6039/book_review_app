@@ -2,6 +2,7 @@ import 'package:book1/src/common/components/app_divider.dart';
 import 'package:book1/src/common/components/book_review_header_wiget.dart';
 import 'package:book1/src/common/components/loading.dart';
 import 'package:book1/src/common/components/review_slider_bar.dart';
+import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/common/enum/common_state_status.dart';
 import 'package:book1/src/common/model/naver_book_info.dart';
 import 'package:book1/src/review/write/cubit/review_write_cubit.dart';
@@ -99,7 +100,7 @@ class ReviewWritePage extends StatelessWidget {
                   );
                 },
               );
-              print("응");
+              await context.read<AuthenticationCubit>().updateReviewCounts(); // 카운트 증가
               context.pop<bool?>(true); // 재로드!!
             }
           },
