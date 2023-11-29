@@ -138,20 +138,27 @@ class _ReviewBoxState extends State<_ReviewBox> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      // 전체화면 텍스트필드
-      maxLines: null,
-      controller: editingController,
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-        hintText: "리뷰를 입력해주세요",
-        contentPadding: EdgeInsets.symmetric(horizontal: 25),
-        hintStyle: TextStyle(
-          color: Color(0xff585858),
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: TextField(
+          // 전체화면 텍스트필드
+          maxLines: null,
+          controller: editingController,
+          decoration: const InputDecoration(
+            border: InputBorder.none,
+            hintText: "리뷰를 입력해주세요",
+            contentPadding: EdgeInsets.symmetric(horizontal: 25),
+            hintStyle: TextStyle(
+              color: Color(0xff585858),
+            ),
+          ),
+          onChanged: context.read<ReviewWriteCubit>().changeReview,
+          style: TextStyle(color: Colors.white),
         ),
       ),
-      onChanged: context.read<ReviewWriteCubit>().changeReview,
-      style: TextStyle(color: Colors.white),
     );
   }
 }

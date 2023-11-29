@@ -17,57 +17,62 @@ class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
 
   Widget _sigupView(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(actions: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-          child: GestureDetector(
-            onTap: () {},
-            child: SvgPicture.asset('assets/svg/icons/icon_close.svg'),
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
+            child: GestureDetector(
+              onTap: () {},
+              child: SvgPicture.asset('assets/svg/icons/icon_close.svg'),
+            ),
+          )
+        ]),
+        body: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              _UserProfileImageFiled(),
+              SizedBox(
+                height: 50,
+              ),
+              _NicknameFiled(),
+              SizedBox(
+                height: 30,
+              ),
+              _DiscriptionFiled(),
+            ],
           ),
-        )
-      ]),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            _UserProfileImageFiled(),
-            SizedBox(
-              height: 50,
-            ),
-            _NicknameFiled(),
-            SizedBox(
-              height: 30,
-            ),
-            _DiscriptionFiled(),
-          ],
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-            left: 20,
-            right: 20,
-            bottom: 20 + MediaQuery.of(context).padding.bottom,
-            top: 20),
-        child: Row(
-          children: [
-            Expanded(
-              child: Btn(
-                onTap: context.read<SignupCubit>().save,
-                text: '가입',
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              bottom: 20 + MediaQuery.of(context).padding.bottom,
+              top: 20),
+          child: Row(
+            children: [
+              Expanded(
+                child: Btn(
+                  onTap: context.read<SignupCubit>().save,
+                  text: '가입',
+                ),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Btn(
-                onTap: () {},
-                backgroudColor: Color(0xff212121),
-                text: '취소',
+              SizedBox(
+                width: 10,
               ),
-            ),
-          ],
+              Expanded(
+                child: Btn(
+                  onTap: () {},
+                  backgroudColor: Color(0xff212121),
+                  text: '취소',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -226,12 +231,12 @@ class _DiscriptionFiled extends StatelessWidget {
         TextField(
           onChanged: context.read<SignupCubit>().changeDiscription,
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontSize: 12),
+          style: TextStyle(color: Colors.white, fontSize: 16),
           maxLength: 50,
           decoration: InputDecoration(
             counterStyle: TextStyle(
               color: Colors.white,
-              fontSize: 15,
+              fontSize: 18,
             ),
             filled: true,
             fillColor: const Color(0xff232323),

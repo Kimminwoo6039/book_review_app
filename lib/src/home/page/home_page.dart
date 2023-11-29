@@ -194,12 +194,12 @@ class _RecentlyReviewListWidget extends StatelessWidget {
             fontWeight: FontWeight.bold,
             size: 20,
           ),
-          AppFont(
-            '더보기',
-            fontWeight: FontWeight.bold,
-            size: 14,
-            color: Color(0xffF4AA2B),
-          )
+          // AppFont(
+          //   '더보기',
+          //   fontWeight: FontWeight.bold,
+          //   size: 14,
+          //   color: Color(0xffF4AA2B),
+          // )
         ],
       ),
     );
