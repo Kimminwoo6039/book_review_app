@@ -12,6 +12,7 @@ class RecentlyCubit extends Cubit<RecentlyState> {
   }
 
   _loadBookReviewInfos() async {
+    emit(state.copyWith(result: []));
     var result = await bookReviewInfoRepository.loadBookReviewRecentlyData();
     emit(state.copyWith(result: result));
   }
