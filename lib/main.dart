@@ -1,5 +1,4 @@
 import 'package:book1/firebase_options.dart';
-import 'package:book1/routers/routers.dart';
 import 'package:book1/src/app.dart';
 import 'package:book1/src/common/cubit/app_data_load_cubit.dart';
 import 'package:book1/src/common/cubit/authentication_cubit.dart';
