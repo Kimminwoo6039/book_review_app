@@ -17,7 +17,6 @@ class SplashPage extends StatelessWidget {
       listenWhen: (previous, current) =>
       current.status == CommonStatus.loaded,
       listener: (context, state) {
-        print("음");
         print(state.status);
         context.read<SpalshCubit>().changeLoadStatus(LoadStatus.auth_check);
         context.read<AuthenticationCubit>().init();
