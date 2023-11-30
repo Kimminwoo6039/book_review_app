@@ -4,6 +4,7 @@ import 'package:book1/src/common/components/app_divider.dart';
 import 'package:book1/src/common/components/app_font.dart';
 import 'package:book1/src/common/components/btn.dart';
 import 'package:book1/src/common/model/naver_book_info.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,6 +14,33 @@ class BookInfoPage extends StatelessWidget {
   final NaverBookInfo naverBookInfo;
 
   const BookInfoPage(this.naverBookInfo, {super.key});
+
+  Future<Widget> message(BuildContext context) async {
+    return await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          content: AppFont(
+            "게시글을 신고하였습니다.",
+            size: 18,
+            color: Colors.black,
+          ),
+          actions: [
+            CupertinoDialogAction(
+                child: AppFont(
+                  "확인",
+                  textAlign: TextAlign.center,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+                onPressed: () {
+                  context.pop(context);
+                })
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +57,21 @@ class BookInfoPage extends StatelessWidget {
           "책 소개",
           size: 18,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: GestureDetector (
+              onTap: (){
+                message(context);
+              },
+              child: AppFont(
+                "게시글 신고하기",
+                size: 14,
+                color: const Color(0xffF4AA2B),
+              ),
+            ),
+          ),
+        ],
         centerTitle: true,
       ),
       body: SingleChildScrollView(

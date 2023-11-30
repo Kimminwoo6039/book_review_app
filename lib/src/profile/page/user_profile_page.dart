@@ -4,6 +4,7 @@ import 'package:book1/src/common/cubit/authentication_cubit.dart';
 import 'package:book1/src/common/enum/common_state_status.dart';
 import 'package:book1/src/profile/cubit/user-review_cubit.dart';
 import 'package:book1/src/profile/cubit/user_profile_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -57,6 +58,7 @@ class UserProfilePage extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate([
               const _profileInfo(),
+              const _Danger(),
               const AppDivider(),
               const _ReviewList(),
             ]),
@@ -66,6 +68,60 @@ class UserProfilePage extends StatelessWidget {
     );
   }
 }
+
+class _Danger extends StatelessWidget {
+  const _Danger({super.key});
+
+  Future<Widget> message(BuildContext context) async {
+    return await showCupertinoDialog(
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          content: AppFont(
+            "사용자를 신고하였습니다.",
+            size: 18,
+            color: Colors.black,
+          ),
+          actions: [
+            CupertinoDialogAction(
+                child: AppFont(
+                  "확인",
+                  textAlign: TextAlign.center,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+                onPressed: () {
+                  context.pop(context);
+                })
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return  Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 18,right: 10),
+          child: GestureDetector (
+            onTap: (){
+              message(context);
+            },
+            child: AppFont(
+              "사용자 신고하기",
+              size: 14,
+              color: const Color(0xffF4AA2B),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 
 class _ReviewList extends StatelessWidget {
   const _ReviewList({super.key});
@@ -193,6 +249,8 @@ class _profileInfo extends StatelessWidget {
                 },
               ),
             ),
+
+
           ],
         )
       ],
