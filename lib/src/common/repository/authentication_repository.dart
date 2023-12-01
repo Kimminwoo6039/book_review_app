@@ -87,7 +87,7 @@ class AuthenticationRepository {
      await FirebaseAuth.instance.signInWithCredential(oauthCredential);
   }
 
-  delete() {
+  deleteID() {
     var currentUser = _firebaseAuth.currentUser;
     currentUser?.delete();
     logout();

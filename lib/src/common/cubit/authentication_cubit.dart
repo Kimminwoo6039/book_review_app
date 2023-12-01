@@ -66,7 +66,7 @@ class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier
   }
 
   void deleteUser() async {
-    await _authenticationRepository.delete();
+     _authenticationRepository.deleteID();
   }
 
 
