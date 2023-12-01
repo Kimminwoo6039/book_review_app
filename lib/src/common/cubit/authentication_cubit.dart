@@ -1,6 +1,7 @@
 
 import 'package:book1/src/common/model/user_model.dart';
 import 'package:book1/src/common/repository/authentication_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,6 +64,11 @@ class AuthenticationCubit extends Cubit<AuthenticationState> with ChangeNotifier
   void logout() async {
     _authenticationRepository.logout();
   }
+
+  void deleteUser() async {
+    await _authenticationRepository.delete();
+  }
+
 
   Future<void>? updateReviewCounts() async {
     var results = await reviewRepository.loadMyAllReviews(state.user!.uid!);
