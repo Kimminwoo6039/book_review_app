@@ -23,27 +23,34 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var refrashController = RefreshController(initialRefresh: false);
 
-  Future<Widget> message(BuildContext context) async {
-    return await showCupertinoDialog(
+  Future<void> _neverSatisfied() async {
+    return showDialog<void>(
+      //다이얼로그 위젯 소환
       context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          content: AppFont(
-            "회원 탈퇴하였습니다.",
-            size: 18,
-            color: Colors.black,
+      barrierDismissible: false, // 다이얼로그 이외의 바탕 눌러도 안꺼지도록 설정
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: ListBody(
+              //List Body를 기준으로 Text 설정
+              children: <Widget>[
+                Text('회원 탈퇴하시겠습니까 ? '),
+              ],
+            ),
           ),
           actions: [
-            CupertinoDialogAction(
-                child: AppFont(
-                  "확인",
-                  textAlign: TextAlign.center,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-                onPressed: () {
-                  context.pop(context);
-                })
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                context.read<AuthenticationCubit>().deleteUser();
+              },
+            ),
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ],
         );
       },
@@ -59,32 +66,35 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(15),
           child: BlocBuilder<AuthenticationCubit, AuthenticationState>(
               builder: (context, state) {
-            return GestureDetector(
-              onTap: () {
-                context.read<AuthenticationCubit>().logout();
-              },
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    backgroundImage: state.user?.profile == null
-                        ? Image.asset('assets/images/default_avatar.png').image
-                        : Image.network(state.user!.profile!).image,
+                return GestureDetector(
+                  onTap: () {
+                    context.read<AuthenticationCubit>().logout();
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        backgroundImage: state.user?.profile == null
+                            ? Image
+                            .asset('assets/images/default_avatar.png')
+                            .image
+                            : Image
+                            .network(state.user!.profile!)
+                            .image,
+                      ),
+                      const SizedBox(width: 15),
+                      AppFont(state.user?.name ?? '', size: 16)
+                    ],
                   ),
-                  const SizedBox(width: 15),
-                  AppFont(state.user?.name ?? '', size: 16)
-                ],
-              ),
-            );
-          }),
+                );
+              }),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: GestureDetector (
-              onTap: (){
-                message(context);
-                context.read<AuthenticationCubit>().deleteUser();
+            child: GestureDetector(
+              onTap: () {
+                _neverSatisfied();
               },
               child: AppFont(
                 "회원 탈퇴",
@@ -144,76 +154,77 @@ class _TopReviewerListWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
       child: BlocBuilder<TopReviewerCubit, TopReviewerState>(
           builder: (context, state) {
-        return Column(
-          children: List.generate(
-            state.results?.length ?? 0,
-            (index) {
-              return GestureDetector(
-                onTap: () {
-                  context.push('/profile/${state.results![index].uid}');
-                },
-                child: Container(
-                  height: 85,
-                  margin: const EdgeInsets.only(bottom: 20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(85),
-                    color: const Color(0xff212121),
-                  ),
-                  child: Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                          radius: 32,
-                          backgroundImage:
-                              Image.network(state.results?[index].profile ?? '')
-                                  .image,
-                        ),
+            return Column(
+              children: List.generate(
+                state.results?.length ?? 0,
+                    (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.push('/profile/${state.results![index].uid}');
+                    },
+                    child: Container(
+                      height: 85,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(85),
+                        color: const Color(0xff212121),
                       ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AppFont(
-                              state.results?[index].name ?? '',
-                              fontWeight: FontWeight.bold,
-                              size: 16,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: CircleAvatar(
+                              backgroundColor: Colors.grey,
+                              radius: 32,
+                              backgroundImage:
+                              Image
+                                  .network(state.results?[index].profile ?? '')
+                                  .image,
                             ),
-                            const SizedBox(height: 8),
-                            AppFont(
-                              state.results?[index].discription ?? '',
-                              size: 12,
-                              color: const Color(
-                                0xff737373,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconStaticsticWidget(
-                                  'assets/svg/icons/icon_journals.svg',
-                                  state.results?[index].reviewCount ?? 0,
+                                AppFont(
+                                  state.results?[index].name ?? '',
+                                  fontWeight: FontWeight.bold,
+                                  size: 16,
                                 ),
-                                const SizedBox(width: 20),
-                                IconStaticsticWidget(
-                                  'assets/svg/icons/icon_people.svg',
-                                  state.results?[index].followersCount ?? 0,
+                                const SizedBox(height: 8),
+                                AppFont(
+                                  state.results?[index].discription ?? '',
+                                  size: 12,
+                                  color: const Color(
+                                    0xff737373,
+                                  ),
                                 ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    IconStaticsticWidget(
+                                      'assets/svg/icons/icon_journals.svg',
+                                      state.results?[index].reviewCount ?? 0,
+                                    ),
+                                    const SizedBox(width: 20),
+                                    IconStaticsticWidget(
+                                      'assets/svg/icons/icon_people.svg',
+                                      state.results?[index].followersCount ?? 0,
+                                    ),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      }),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }),
     );
   }
 
@@ -266,7 +277,10 @@ class _RecentlyReviewListWidget extends StatelessWidget {
               children: [
                 SizedBox(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.5,
                   child: Image.network(
                     bookInfo.naverBookInfo?.image ?? '',
                     fit: BoxFit.cover,
@@ -286,7 +300,7 @@ class _RecentlyReviewListWidget extends StatelessWidget {
                       const SizedBox(width: 5),
                       AppFont(
                         ((bookInfo.totalCount ?? 0) /
-                                (bookInfo.reviewerUids?.length ?? 0))
+                            (bookInfo.reviewerUids?.length ?? 0))
                             .toStringAsFixed(2),
                         size: 16,
                         color: Color(0xffF4AA2B),
@@ -324,23 +338,26 @@ class _RecentlyReviewListWidget extends StatelessWidget {
         _header(),
         const SizedBox(height: 15),
         SizedBox(
-          height: MediaQuery.of(context).size.width * 0.5 + 100,
+          height: MediaQuery
+              .of(context)
+              .size
+              .width * 0.5 + 100,
           child: Padding(
             padding: const EdgeInsets.only(left: 25),
             child: BlocBuilder<RecentlyCubit, RecentlyState>(
                 builder: (context, state) {
-              return PageView.builder(
-                padEnds: false,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 25),
-                    child: _bookView(state.result![index], context),
+                  return PageView.builder(
+                    padEnds: false,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        margin: EdgeInsets.only(right: 25),
+                        child: _bookView(state.result![index], context),
+                      );
+                    },
+                    controller: PageController(viewportFraction: 0.45),
+                    itemCount: state.result?.length ?? 0,
                   );
-                },
-                controller: PageController(viewportFraction: 0.45),
-                itemCount: state.result?.length ?? 0,
-              );
-            }),
+                }),
           ),
         )
       ],
