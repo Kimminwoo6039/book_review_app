@@ -1,10 +1,8 @@
 
-![a4](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/4797535d-2394-417b-8fba-996220e02c6b)
-![a3](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/1dcd0582-fd34-4af5-9c64-455167aca734)
-![a2](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/3a1f09ba-99e1-4030-b54e-c40a4919e293)
+
 ![a1](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/5de29503-592c-4544-978d-b3cbf643a4fc)
-
-
+![a2](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/3a1f09ba-99e1-4030-b54e-c40a4919e293)
+![a3](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/1dcd0582-fd34-4af5-9c64-455167aca734)
 
 ### Firebase CLi
 
