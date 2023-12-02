@@ -2,7 +2,7 @@
 ![1-1](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/5c610432-c24e-4f64-9c22-f9a28cf79d85)
 ![1-2](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/01788749-baac-4d74-92f3-159e89d926f7)
 ![스크린샷 2023-12-01 192518](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/643f5302-fb09-4c16-b0ab-6c1c8aa1f159)
-![제목 없는 디자인](https://github.com/Kimminwoo6039/book_review_app/assets/116887590/b6bcdb2c-fa96-4d4e-a745-ce958073e150)
+
 
 
 ### Firebase CLi
