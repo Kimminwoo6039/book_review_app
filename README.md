@@ -16,7 +16,7 @@ https://github.com/Kimminwoo6039/book_review_app/assets/116887590/78830005-8bc4-
 ### Firebase CLi
 
 ```
-    npm install -g flutter_tools
+    npm install -g firebase-tools
 ```
 
 ## 로그인 여부 확인
